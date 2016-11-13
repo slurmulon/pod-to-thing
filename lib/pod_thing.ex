@@ -88,7 +88,7 @@ defmodule Pod.Thing do
   end
 
   def from_sql(source, chunk_size \\ @chunk_size) do
-    File.stream!(source, [], chunk_size)
+    bytes = File.stream!(source, [], chunk_size)
     |> Stream.transform("", fn line, sql ->
       replaced = Enum.reduce(@mappings, line, fn {from, to}, acc ->
         case to do
@@ -100,6 +100,10 @@ defmodule Pod.Thing do
       {[replaced], sql <> replaced}
     end)
     |> Enum.join("")
+
+    timestamp = (DateTime.utc_now |> DateTime.to_unix |> Integer.to_string)
+
+    File.write("output/" <> timestamp <> ".sql", bytes, [:write, :utf8])
   end
 
   defp parse_args(args) do
@@ -113,7 +117,7 @@ defmodule Pod.Thing do
     IO.puts "Converting POD database to Thing database format ..."
 
     # sql = Pod.Thing.from_sql_async("test.sql")
-    sql = :timer.tc(fn -> Pod.Thing.from_sql("test.sql") end) |> IO.inspect
+    sql = :timer.tc(fn -> Pod.Thing.from_sql("test.sql") end)# |> IO.inspect
 
     IO.puts "Done!"
 

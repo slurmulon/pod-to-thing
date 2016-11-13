@@ -1,6 +1,9 @@
 # The directory Mix will write compiled artifacts to.
 /_build
 
+# Results of database conversions live here
+/output
+
 # If you run "mix test --cover", coverage assets end up here.
 /cover
 
