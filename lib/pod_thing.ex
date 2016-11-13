@@ -5,7 +5,7 @@ defmodule Pod.Thing do
   # IDEA: could use :lowercase atom so we don't have to do so much error-prone copy pasta
   @mappings %{
     ~r/GS1/im => "gs1",
-    ~r/_CD$/m => "_code",
+    ~r/_CD/m => "_code",
     ~r/_NM/m => "_name",
     ~r/PREFIX/i => "office",
     ~r/_TYPE/m => "_type",
@@ -102,8 +102,9 @@ defmodule Pod.Thing do
     |> Enum.join("")
 
     timestamp = (DateTime.utc_now |> DateTime.to_unix |> Integer.to_string)
+    filename  = "output/#{timestamp}.sql"
 
-    File.write("output/" <> timestamp <> ".sql", bytes, [:write, :utf8])
+    File.write(filename, bytes, [:write, :utf8])
   end
 
   defp parse_args(args) do
@@ -116,7 +117,6 @@ defmodule Pod.Thing do
   def start(_type, args) do
     IO.puts "Converting POD database to Thing database format ..."
 
-    # sql = Pod.Thing.from_sql_async("test.sql")
     sql = :timer.tc(fn -> Pod.Thing.from_sql("test.sql") end)# |> IO.inspect
 
     IO.puts "Done!"
