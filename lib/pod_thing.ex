@@ -101,7 +101,7 @@ defmodule Pod.Thing do
     end)
     |> Enum.join("")
 
-    timestamp = (DateTime.utc_now |> DateTime.to_unix |> Integer.to_string)
+    timestamp = DateTime.utc_now |> DateTime.to_unix |> Integer.to_string
     filename  = "output/#{timestamp}.sql"
 
     File.write(filename, bytes, [:write, :utf8])
@@ -124,7 +124,7 @@ defmodule Pod.Thing do
     source = options[:source]
     sql = Pod.Thing.from_sql source
 
-    IO.puts "Done!" # TODO: output file name
+    IO.puts "Done!"
 
     {:ok, self(), sql}
   end
