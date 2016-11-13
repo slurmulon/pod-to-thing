@@ -32,16 +32,15 @@ defmodule Pod.Thing do
   # TODO: utilize https://hexdocs.pm/gen_stage/Experimental.Flow.html#partition/2-options
   # FIXME: something is definitely off here, bloats way tooo big in memory
   def from_sql(source) do
-    # File.stream!(source, :line)
     File.stream!(source)
     |> Flow.from_enumerable()
     |> Flow.partition()
     |> Flow.reduce(fn -> %{} end, fn line, sql ->
-      mappings = Enum.sort(@mappings, fn({from, to}) -> from end)
-
-      Enum.flat_map_reduce(mappings, sql, fn({from, to}, result) ->
+      replaced = Enum.flat_map_reduce(@mappings, sql, fn({from, to}, result) ->
         {[String.replace(line, from, to)], result}
       end)
+
+      {[replaced], sql <> replaced}
     end)
     |> Enum.sort()
     |> Enum.join("")
@@ -50,12 +49,12 @@ defmodule Pod.Thing do
 
   def from_sql_sync(source) do
     File.stream!(source)
-    |> Stream.transform("", fn(line, acc) ->
-      replaced = Enum.reduce(@mappings, line, fn({from, to}, acc) ->
+    |> Stream.transform("", fn line, sql ->
+      replaced = Enum.reduce(@mappings, line, fn {from, to}, acc ->
         String.replace(acc, from, to)
       end)
 
-      {[replaced], acc <> replaced}
+      {[replaced], sql <> replaced}
     end)
     |> Enum.join("")
     |> IO.inspect
