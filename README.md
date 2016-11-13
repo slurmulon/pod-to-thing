@@ -23,4 +23,12 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
       [applications: [:pod_thing]]
     end
     ```
+## Setup
 
+If you would like to run the app as a CLI, first run the following:
+
+`mix escript.build`
+
+You can then use the binary as follows:
+
+`./pod_thing --source-pod.sql`
