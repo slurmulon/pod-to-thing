@@ -6,25 +6,24 @@ defmodule Pod.Thing do
   # TODO: make the keys regex based
   @mappings %{
     "BSIN" => "bsin",
-    "_TYPE_NAME" => "_type_name",
-    "_TYPE_CD" => "_type_code", # :manufacturer, :retailer
-    "_LINK" => "_url",
-    "BRAND" => "brand",
-    "Group" => "group",
-    "OWNER_CD" => "owner_pod_code",
-    "OWNER_CODE" => "owner_pod_code",
-    "OWNER_NM" => "owner_name",
-    "OWNER_LINK" => "owner_url",
-    "OWNER_WIKI_EN" => "owner_wiki_en",
-    "BRAND_TYPE_NM" => "brand_type_name",
+    # "_TYPE_NAME" => "_type_name",
+    # "_TYPE_CD" => "_type_code", # :manufacturer, :retailer
+    ~r/_LINK$/ => "_url",
+    ~r/_CD$/ => "_code",
+    ~r/_NM$/ => "_name",
+    ~r/_TYPE/ => "_type",
+    ~r/_GROUP/ => "_group",
+    ~r/_LEVEL/ => "_level",
+    ~r/_WIKI_EN/ => "_wiki_en",
+    ~r/_C_CD/ => "_class_code",
+    ~r/_F_CD/ => "_family_code",
+    ~r/_S_CD/ => "_segment_code",
 
-    "GPC_CD" => "gpc_code",
-    "GPC_NM" => "gpc_name",
-    "GPC_LEVEL" => "gpc_level",
+    "BRAND" => "brand",
+    "OWNER" => "owner",
+    "Group" => "group",
+    "GPC" => "gpc",
     "SOURCE" => "release",
-    "GPC_C_CD" => "gpc_class_code",
-    "GPC_F_CD" => "gpc_family_code",
-    "GPC_S_CD" => "gpc_segment_code",
 
     "COUNTRY_ISO_CD" => "country_iso_code",
     "PREFIX_NM" => "office"
@@ -41,7 +40,6 @@ defmodule Pod.Thing do
       mappings = Enum.sort(@mappings, fn({from, to}) -> from end)
 
       Enum.flat_map_reduce(mappings, sql, fn({from, to}, result) ->
-        # TODO: debug with IO.inspect
         {[String.replace(line, from, to)], result}
       end)
     end)
