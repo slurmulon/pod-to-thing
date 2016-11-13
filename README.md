@@ -4,6 +4,14 @@
 
 ---
 
+## Summary
+
+`thing` is an in-progress product information API built with Elixir.
+
+It sits on top of the amazing dataset maintained by Product Open Data (POD).
+
+`thing` desires it's own database schema for a variety of reasons, and that's what this tool achieves - it converts from the original P.O.D. schemas into `thing` schemas.
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
@@ -23,6 +31,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
       [applications: [:pod_thing]]
     end
     ```
+
 ## Setup
 
 If you would like to run the app as a CLI, first run the following:
