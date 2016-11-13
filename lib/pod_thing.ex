@@ -109,19 +109,31 @@ defmodule Pod.Thing do
 
   defp parse_args(args) do
     {options, _, _} = OptionParser.parse(args,
-      switches: [name: :string]
+      switches: [source: :string]
     )
     options
   end
 
-  def start(_type, args) do
+  def process([]) do
+    {:ok, self()}
+  end
+
+  def process(options) do
     IO.puts "Converting POD database to Thing database format ..."
 
-    sql = :timer.tc(fn -> Pod.Thing.from_sql("test.sql") end)# |> IO.inspect
+    source = options[:source]
+    sql = Pod.Thing.from_sql source
 
-    IO.puts "Done!"
+    IO.puts "Done!" # TODO: output file name
 
     {:ok, self(), sql}
   end
 
+  def start(_type, args) do
+    main args
+  end
+
+  def main(args) do
+    args |> parse_args |> process
+  end
 end
