@@ -8,9 +8,9 @@
 
 `thing` is an in-progress product information API built with Elixir.
 
-It sits on top of the amazing dataset maintained by Product Open Data (POD).
+It sits on top of the [amazing dataset](http://product-open-data.com/) maintained by Product Open Data (POD).
 
-`thing` desires it's own database schema for a variety of reasons, and that's what this tool achieves - it converts from the original P.O.D. schemas into `thing` schemas.
+`thing` desires it's own database schema for a variety of reasons, and that's what this tool achieves - it converts from the original P0D schemas into `thing` schemas.
 
 ## Installation
 
