@@ -40,4 +40,4 @@ If you would like to run the app as a CLI, first run the following:
 
 You can then use the binary as follows:
 
-`./pod_thing --source-pod.sql`
+`./pod_thing --source=pod.sql`
