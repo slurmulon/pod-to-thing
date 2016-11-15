@@ -17,11 +17,11 @@ defmodule Pod.Thing.Mixfile do
   def application do
     [
       mod: {Pod.Thing, []},
-      applications: [:logger, :gen_stage]
+      applications: [:logger]
     ]
   end
 
   defp deps do
-    [{:gen_stage, "~> 0.4"}]
+    []
   end
 end

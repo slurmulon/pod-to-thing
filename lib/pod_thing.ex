@@ -1,6 +1,5 @@
 defmodule Pod.Thing do
   use Application
-  alias Experimental.Flow
 
   # IDEA: could use :lowercase atom so we don't have to do so much error-prone copy pasta
   @mappings %{
@@ -83,25 +82,6 @@ defmodule Pod.Thing do
   }
 
   @chunk_size :math.pow(2, 20) |> round
-
-  # WARN: not really working, still trying to determine if it's even possible given the need for order
-  def from_sql_async(source, chunk_size \\ @chunk_size) do
-   case File.stat source do
-     {:ok, %{size: size}} ->
-        File.stream!(source, [], chunk_size) # TODO: play with large byte chunks here instead of iterating over each line
-        |> Stream.chunk(size / 8) # TODO: determine number of cores
-        # |> Stream.map # TODO: map each chunk by its index, so we can sort the chunks at the end
-        |> Flow.from_enumerable()
-        |> Flow.partition()
-        |> Flow.reduce(fn -> %{} end, fn line, sql ->
-          {[line], sql <> line}
-        end)
-        # TODO: Flow.departition
-        |> Enum.to_list()
-        |> Enum.join()
-     {:error, reason} -> IO.puts reason
-   end
-  end
 
   def from_sql(source, chunk_size \\ @chunk_size) do
     bytes = File.stream!(source, [], chunk_size)
