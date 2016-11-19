@@ -87,10 +87,9 @@ defmodule Pod.Thing do
     bytes = File.stream!(source, [], chunk_size)
     |> Stream.transform("", fn line, sql ->
       replaced = Enum.reduce(@mappings, line, fn {from, to}, acc ->
-        case to do
-          :lower -> String.replace(acc, from, from |> String.downcase)
-          _ -> String.replace(acc, from, to)
-        end
+        into = if (to == :lower), do: String.downcase from, else: to
+
+        String.replace(acc, from, into)
       end)
 
       {[replaced], sql <> replaced}
